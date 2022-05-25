@@ -1,7 +1,6 @@
-#from ctypes.wintypes import HPALETTE
-#from curses.ascii import HT
+from django.http import Http404
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_list_or_404, render
 from django.template import loader
 
 from . models import Question
@@ -25,8 +24,15 @@ def index(request):
 
 
 
+# might raise 404 error.
 def detail(request, question_id):
-    return HttpResponse("You are looking at question %s.", question_id)
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
+
+    return render(request, 'polls/detail.html', {'question': question})
+    #return HttpResponse("You are looking at question %s.", question_id)
 
 
 def results(request, question_id):
