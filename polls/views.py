@@ -1,15 +1,23 @@
-from ctypes.wintypes import HPALETTE
-from curses.ascii import HT
+#from ctypes.wintypes import HPALETTE
+#from curses.ascii import HT
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template import loader
+
+from . models import Question
 
 # Create your views here.
 
 
 def index(request):
     lastest_question_list = Question.objects.order_by('-pub_date')[:5]
-    output = ', '.join([q.question_text for q in lastest_question_list])
-    return HttpResponse(output)
+    template = loader.get_template('polls/index.html')
+    context = {
+        'latest_question_list': lastest_question_list,
+    }
+    return HttpResponse(template.render(context, request)
+    #output = ', '.join([q.question_text for q in lastest_question_list])
+    #return HttpResponse(output)
     #eturn HttpResponse("Hello, world. You're at the polls index.")
 
 
