@@ -1,7 +1,6 @@
 # polls/urls.py 
 
 from nturl2path import url2pathname
-from termios import VDISCARD
 from django.urls import URLPattern, path 
 
 from . import views 
