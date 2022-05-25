@@ -1,15 +1,23 @@
 from django.http import Http404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_list_or_404, get_object_or_404, render
+from django.shortcuts import get_list_or_404, render
 from django.urls import reverse
-from django.template import loader
+from django.views import generic
+#from django.template import loader
 
 from . models import Choice, Question
 
 # Create your views here.
 
 
-def index(request):
+def IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'lastest_question_list'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Question.objects.order_by('-pub_date')[:5]
+
     lastest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {'lastest_question_list': lastest_question_list}
     return render(request, 'polls/index.html', context)
@@ -26,7 +34,9 @@ def index(request):
 
 
 # might raise 404 error.
-def detail(request, question_id):
+def DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
     try:
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
@@ -36,7 +46,7 @@ def detail(request, question_id):
     #return HttpResponse("You are looking at question %s.", question_id)
 
 
-def results(request, question_id):
+def ResultsView(generic.DetailView):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/results.html', {'question': question})
     response = "You are looking at the results of question %s."
