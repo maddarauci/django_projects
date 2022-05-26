@@ -1,10 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.views import generic
 
 #from django.template import loader
 
-from . models import Choice, Question
+from .models import Choice, Question
 
 # Create your views here.
 
@@ -17,9 +18,10 @@ def IndexView(generic.ListView):
         """Return the last five published questions."""
         return Question.objects.order_by('-pub_date')[:5]
 
-    lastest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'lastest_question_list': lastest_question_list}
-    return render(request, 'polls/index.html', context)
+
+    #lastest_question_list = Question.objects.order_by('-pub_date')[:5]
+    #context = {'lastest_question_list': lastest_question_list}
+    #return render(request, 'polls/index.html', context)
     '''
     template = loader.get_template('polls/index.html')
     context = {
